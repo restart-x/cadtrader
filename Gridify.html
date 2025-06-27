@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gridify</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="assets/gridify-logo.png">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/STLLoader.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <style>
+        /* Dark Theme Styles */
+        :root {
+            --primary-color: #ffc300;
+            --secondary-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --dark-bg: #0a0a0a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --header-blur-bg: rgba(18, 18, 18, 0.8);
+            --btn-hover-bg: #B8860B;
+            --btn-hover-text: #121212;
+            --glass-blur: blur(15px);
+            --light-text: #aaaaaa;
+            --border-color: rgba(212, 175, 55, 0.2);
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Verdana', Geneva, Tahoma, sans-serif;
+            outline: none !important;
+            box-shadow: none !important;
+            border: none;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .preview-section span {
+            color: var(--primary-color);
+        }
+
+        html {
+            font-size: 62.5%;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            height: 100%;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            font-size: 1.6rem;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-top: 80px;
+            /* Added to account for fixed header */
+
+        }
+
+
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-top: 10rem;
+            margin-bottom: 12rem;
+            padding: 2rem;
+        }
+
+        .fcontainer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 3rem;
+        }
+
+        .upload-section {
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+        }
+
+        .upload-area i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .upload-area p {
+            color: var(--light-text);
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--light-text);
+            font-size: 1.4rem;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 1rem;
+            background: var(--card-bg);
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--border-color);
+            font-size: 1.4rem;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        button {
+            background: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 1rem 2rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 1rem;
+            display: inline-block;
+            font-size: 1.4rem;
+        }
+
+        button:hover {
+            background: var(--btn-hover-bg);
+            color: var(--btn-hover-text);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .preview-section {
+            background: var(--card-bg) ;
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            padding-bottom: 0;
+            margin-bottom: 2rem;
+            width: 100%;
+        }
+
+        .grid-container {
+            display: grid;
+            gap: 5px;
+            margin: 2rem 0;
+            justify-content: center;
+        }
+
+        .grid-item {
+            position: relative;
+            overflow: hidden;
+            background: var(--dark-bg);
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grid-item img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .quality-control {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .quality-control input {
+            flex: 1;
+        }
+
+        .download-options {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        #generatedImageContainer {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        #generatedImageContainer img {
+            max-width: 100%;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .actions button {
+            flex: 1;
+            min-width: 100px;
+            margin-top: 0;
+            max-width: 170px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+                padding-top: 70px;
+                /* Adjusted for mobile header */
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .actions,
+            .download-options {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+
+            h1 {
+                font-size: 2.4rem;
+                margin-bottom: 2rem;
+            }
+
+            .control-group {
+                min-width: 100%;
+            }
+
+            .upload-section,
+            .preview-section {
+                padding: 1.5rem;
+            }
+
+            .actions button {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 0.5rem;
+                padding-top: 60px;
+                /* Adjusted for small mobile header */
+            }
+
+            .container {
+                padding: 0.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .upload-section,
+            .preview-section {
+                padding: 1rem;
+            }
+
+            .upload-area {
+                padding: 1.5rem 0.5rem;
+            }
+
+            input,
+            select,
+            button {
+                padding: 0.8rem;
+            }
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--header-blur-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+            margin: 0;
+        }
+
+        .logo span {
+            color: var(--text-color);
+        }
+
+        .main-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin-right: 4rem;
+        }
+
+        .nav-links li {
+            margin-left: 25px;
+            position: relative;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            font-size: 20px;
+            color: var(--text-color);
+            transition: color 0.3s;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-bar {
+            position: relative;
+            margin-right: 15px;
+        }
+
+        .search-bar input {
+            padding: 8px 15px 8px 35px;
+            border-radius: 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            width: 200px;
+            font-size: 15px;
+            color: var(--text-color);
+        }
+
+        .search-bar input::placeholder {
+            color: var(--light-text);
+        }
+
+        .search-bar i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            font-size: 16px;
+            transform: translateY(-50%);
+            color: var(--light-text);
+        }
+
+        .action-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .action-icon {
+            margin: 10px;
+            position: relative;
+            color: var(--text-color);
+            font-size: 25px;
+            transition: color 0.3s;
+        }
+
+        .action-icon:hover {
+            color: var(--primary-color);
+        }
+
+        .action-icon .count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--primary-color);
+            color: var(--btn-hover-text);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            cursor: pointer;
+            font-size: 20px;
+            color: var(--text-color);
+            margin-right: 15px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .search-bar input {
+                width: 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .search-bar {
+                display: none;
+            }
+
+            .header-container {
+                padding: 0 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .action-icon {
+                margin-left: 10px;
+            }
+        }
+
+  .footer {
+  background: rgba(17, 17, 17, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #eee;
+  padding: 2rem 0;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 1.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer .container p {
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+        /* Responsive Design */
+        @media (max-width: 991px) {
+            html {
+                font-size: 55%;
+            }
+
+            header {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header .fa-bars {
+                display: block;
+            }
+
+            header .navbar {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--header-blur-bg);
+                backdrop-filter: var(--glass-blur);
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+                padding: 1rem 2rem;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: var(--transition);
+            }
+
+            header .navbar.active {
+                clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+            }
+
+            header .navbar a {
+                display: block;
+                margin: 1.5rem 0;
+                padding: 1rem;
+                background-color: var(--card-bg);
+                border-radius: var(--border-radius);
+                text-align: center;
+                border: 1px solid var(--border-color);
+            }
+
+            .hero .container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-content {
+                margin-bottom: 5rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .add-to-cart {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            header .fa-bars {
+                display: block;
+            }
+
+            header .navbar {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--header-blur-bg);
+                backdrop-filter: var(--glass-blur);
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+                padding: 1rem 2rem;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: var(--transition);
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 450px) {
+            html {
+                font-size: 50%;
+            }
+
+            .section-title {
+                font-size: 3rem;
+            }
+
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            header .fa-bars {
+                display: block;
+            }
+
+            header .navbar {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: var(--header-blur-bg);
+                backdrop-filter: var(--glass-blur);
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
+                padding: 1rem 2rem;
+                clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+                transition: var(--transition);
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">CAD<span>Trader.</span></a>
+
+            <div class="main-nav">
+                <div class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </div>
+
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="products.html" target="_blank">Products</a></li>
+                    <li><a href="products.html" target="_blank">Categories</a></li>
+                    <li><a href="#proof">About</a></li>
+                    <li><a href="https://wa.me/919635639444?text=Hello,%20I'm%20interested%20in%20the%20Premium%20CAD%20Files%20Bundle"
+                            target="_blank">Contact</a></li>
+                </ul>
+
+                <div class="header-actions">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search designs...">
+                    </div>
+
+                    <div class="action-icons">
+                        <a href="#" class="action-icon">
+                            <i class="far fa-heart"></i>
+                            <span class="count">0</span>
+                        </a>
+                        <a href="#" class="action-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="count">0</span>
+                        </a>
+                        <a href="#" class="action-icon">
+                            <i class="far fa-user"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="upload-section">
+                <div class="upload-area" id="dropArea">
+                    <i>📁</i>
+                    <h3>Drag & Drop Images Here</h3>
+                    <p>or click to browse files (max 100)</p>
+                    <input type="file" id="fileInput" accept="image/*" multiple style="display: none;">
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="rows">Rows</label>
+                        <input type="number" id="rows" min="1" max="20" value="5">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="columns">Columns</label>
+                        <input type="number" id="columns" min="1" max="20" value="5">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="cellSpacing">Cell Spacing (px)</label>
+                        <input type="number" id="cellSpacing" min="0" max="20" value="5">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="imageSize">Output Size (px)</label>
+                        <input type="number" id="imageSize" min="500" max="5000" value="2000">
+                    </div>
+                </div>
+
+                <div class="quality-control">
+                    <label for="quality">Image Quality (1-100)</label>
+                    <input type="number" id="quality" min="1" max="100" value="90">
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <h2>Preview <span>Images</span></h2>
+                <div id="gridPreview" class="grid-container"></div>
+
+                <div class="actions">
+                    <button id="generateBtn">Generate Image</button>
+                    <button id="clearBtn">Clear All</button>
+                </div>
+
+                <div id="generatedImageContainer"></div>
+
+                <div class="download-options" id="downloadOptions" style="display: none;">
+                    <button id="downloadJpg">Download JPG</button>
+                    <button id="downloadPng">Download PNG</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+<!-- Footer Section -->
+<footer class="footer">
+  <div class="container">
+    <div class="copyright">
+      <p>&copy; 2025 xRestart911. All Rights Reserved.</p>
+    </div>
+  </div>
+</footer>
+
+
+
+
+
+    <script>
+        // DOM elements
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const gridPreview = document.getElementById('gridPreview');
+        const rowsInput = document.getElementById('rows');
+        const columnsInput = document.getElementById('columns');
+        const cellSpacingInput = document.getElementById('cellSpacing');
+        const imageSizeInput = document.getElementById('imageSize');
+        const generateBtn = document.getElementById('generateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const watermarkText = document.getElementById('watermarkText');
+        const applyWatermark = document.getElementById('applyWatermark');
+        const qualityInput = document.getElementById('quality');
+        const downloadOptions = document.getElementById('downloadOptions');
+        const downloadJpg = document.getElementById('downloadJpg');
+        const downloadPng = document.getElementById('downloadPng');
+        const generatedImageContainer = document.getElementById('generatedImageContainer');
+
+        // State
+        let images = [];
+        let watermark = null;
+        let generatedImageUrl = null;
+        let generatedCanvas = null;
+
+        // Event listeners
+        dropArea.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', handleFileSelect);
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.style.borderColor = 'var(--primary-color)';
+        });
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.style.borderColor = 'var(--border-color)';
+        });
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.style.borderColor = 'var(--border-color)';
+            if (e.dataTransfer.files.length > 0) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileSelect({ target: fileInput });
+            }
+        });
+
+        rowsInput.addEventListener('input', updateGrid);
+        columnsInput.addEventListener('input', updateGrid);
+        cellSpacingInput.addEventListener('input', updateGrid);
+        generateBtn.addEventListener('click', generateImage);
+        clearBtn.addEventListener('click', clearAll);
+        downloadJpg.addEventListener('click', () => downloadImage('jpg'));
+        downloadPng.addEventListener('click', () => downloadImage('png'));
+
+        // Functions
+        function handleFileSelect(event) {
+            const files = event.target.files;
+            if (files.length > 100) {
+                alert('Maximum 100 images allowed');
+                return;
+            }
+
+            images = [];
+
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = function () {
+                        images.push({
+                            src: e.target.result,
+                            file: file,
+                            width: img.width,
+                            height: img.height
+                        });
+
+                        if (images.length === Array.from(files).filter(f => f.type.startsWith('image/')).length) {
+                            updateGrid();
+                        }
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function updateGrid() {
+            const rows = parseInt(rowsInput.value);
+            const cols = parseInt(columnsInput.value);
+            const spacing = parseInt(cellSpacingInput.value);
+
+            gridPreview.innerHTML = '';
+            gridPreview.style.gap = `${spacing}px`;
+            gridPreview.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+            const totalCells = rows * cols;
+
+            for (let i = 0; i < totalCells; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'grid-item';
+
+                if (i < images.length) {
+                    const img = document.createElement('img');
+                    img.src = images[i].src;
+                    img.style.objectFit = 'contain';
+                    img.style.maxWidth = '100%';
+                    img.style.maxHeight = '100%';
+                    cell.appendChild(img);
+                }
+
+                gridPreview.appendChild(cell);
+            }
+        }
+
+        async function generateImage() {
+            if (images.length === 0) {
+                alert('Please upload some images first');
+                return;
+            }
+
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+            downloadOptions.style.display = 'none';
+            generatedImageContainer.innerHTML = '';
+
+            try {
+                // Create a container for our canvas generation
+                const container = document.createElement('div');
+                container.style.position = 'fixed';
+                container.style.left = '-9999px';
+                container.style.top = '0';
+                container.style.width = `${imageSizeInput.value}px`;
+                container.style.height = 'auto';
+                container.style.background = 'white';
+                container.style.padding = `${cellSpacingInput.value}px`;
+                document.body.appendChild(container);
+
+                // Create a grid inside the container
+                const gridClone = document.createElement('div');
+                gridClone.style.display = 'grid';
+                gridClone.style.gridTemplateColumns = `repeat(${columnsInput.value}, 1fr)`;
+                gridClone.style.gap = `${cellSpacingInput.value}px`;
+                gridClone.style.width = '100%';
+                container.appendChild(gridClone);
+
+                // Calculate cell size
+                const totalWidth = parseInt(imageSizeInput.value) - (2 * parseInt(cellSpacingInput.value));
+                const cellSize = (totalWidth - ((parseInt(columnsInput.value) - 1) * parseInt(cellSpacingInput.value))) / parseInt(columnsInput.value);
+
+                // Add all images to the grid
+                const totalCells = rowsInput.value * columnsInput.value;
+                for (let i = 0; i < totalCells; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-item';
+                    cell.style.width = `${cellSize}px`;
+                    cell.style.height = `${cellSize}px`;
+                    cell.style.position = 'relative';
+                    cell.style.background = 'white';
+                    cell.style.display = 'flex';
+                    cell.style.alignItems = 'center';
+                    cell.style.justifyContent = 'center';
+
+                    if (i < images.length) {
+                        const img = document.createElement('img');
+                        img.src = images[i].src;
+                        img.style.maxWidth = '100%';
+                        img.style.maxHeight = '100%';
+                        img.style.objectFit = 'contain';
+                        img.style.display = 'block';
+                        cell.appendChild(img);
+                    }
+
+                    gridClone.appendChild(cell);
+                }
+
+                // Wait for all images to load
+                await new Promise((resolve) => {
+                    const imgs = gridClone.querySelectorAll('img');
+                    if (imgs.length === 0) return resolve();
+
+                    let loaded = 0;
+                    imgs.forEach(img => {
+                        if (img.complete) {
+                            loaded++;
+                        } else {
+                            img.onload = () => {
+                                loaded++;
+                                if (loaded === imgs.length) resolve();
+                            };
+                            img.onerror = () => {
+                                loaded++; // Count even if error to prevent infinite waiting
+                                if (loaded === imgs.length) resolve();
+                            };
+                        }
+                    });
+
+                    // Resolve if all images are already loaded
+                    if (loaded === imgs.length) resolve();
+                });
+
+                // Convert to canvas
+                generatedCanvas = await html2canvas(gridClone, {
+                    scale: 1,
+                    logging: true,
+                    useCORS: true,
+                    backgroundColor: "white",
+                    allowTaint: true,
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: container.offsetWidth,
+                    windowHeight: container.offsetHeight
+                });
+
+                // Add watermark if exists
+                if (watermark) {
+                    const ctx = generatedCanvas.getContext('2d');
+                    ctx.font = 'bold 40px Arial';
+                    ctx.fillStyle = 'rgba(200, 200, 200, 0.2)';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+
+                    ctx.save();
+                    ctx.translate(generatedCanvas.width / 2, generatedCanvas.height / 2);
+                    ctx.rotate(-45 * Math.PI / 180);
+                    ctx.fillText(watermark, 0, 0);
+                    ctx.restore();
+                }
+
+                // Display the result
+                generatedImageUrl = generatedCanvas.toDataURL('image/jpeg', qualityInput.value / 100);
+                const imgPreview = document.createElement('img');
+                imgPreview.src = generatedImageUrl;
+                generatedImageContainer.appendChild(imgPreview);
+                downloadOptions.style.display = 'flex';
+
+                // Clean up
+                document.body.removeChild(container);
+
+            } catch (error) {
+                console.error('Error generating image:', error);
+                alert('Error generating image. Please check console for details.');
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Image';
+            }
+        }
+
+        function downloadImage(format) {
+            if (!generatedCanvas) return;
+
+            const link = document.createElement('a');
+            const filename = `image-grid-${new Date().getTime()}.${format}`;
+
+            if (format === 'png') {
+                link.href = generatedCanvas.toDataURL('image/png');
+            } else {
+                link.href = generatedCanvas.toDataURL('image/jpeg', qualityInput.value / 100);
+            }
+
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function clearAll() {
+            images = [];
+            fileInput.value = '';
+            gridPreview.innerHTML = '';
+            gridPreview.style.gap = '5px';
+            gridPreview.style.gridTemplateColumns = '';
+            watermark = null;
+            generatedImageUrl = null;
+            generatedCanvas = null;
+            downloadOptions.style.display = 'none';
+            generatedImageContainer.innerHTML = '';
+
+            // Reset form inputs to default values
+            rowsInput.value = '5';
+            columnsInput.value = '5';
+            cellSpacingInput.value = '5';
+            imageSizeInput.value = '2000';
+            qualityInput.value = '90';
+        }
+    </script>
+
+    <!-- Add html2canvas library -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+</body>
+
+</html>
