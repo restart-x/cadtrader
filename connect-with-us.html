@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect With Us | CADTrader</title>
+    <link rel="icon" href="assets/icon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #ffc300;
+            --secondary-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --dark-bg: #0a0a0a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --header-blur-bg: rgba(18, 18, 18, 0.8);
+            --btn-hover-bg: #ffc300;
+            --btn-hover-text: #121212;
+            --glass-blur: blur(15px);
+            --light-text: #aaaaaa;
+            --border-color: rgba(212, 175, 55, 0.2);
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Verdana', Geneva, Tahoma, sans-serif;
+            outline: none !important;
+            box-shadow: none !important;
+            border: none;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        html {
+            font-size: 62.5%;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--header-blur-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: var(--text-color);
+        }
+
+        /* Offer Bar */
+        .offer-bar {
+            flex: 1;
+            overflow: hidden;
+            background: transparent;
+            padding: 0 20px;
+            margin-left: 20px;
+            border: none;
+            box-shadow: none;
+        }
+
+        .offer-item {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .offer-track {
+            display: inline-block;
+            white-space: nowrap;
+            animation: scroll 18s linear infinite;
+            padding-left: 100%;
+        }
+
+        .offer-item {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 30px;
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        /* Animation for offer bar */
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .offer-bar {
+                min-width: 120px;
+                padding: 5px 8px;
+            }
+
+            .offer-item {
+                font-size: 16px;
+                margin-right: 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+        }
+
+        @media (min-width: 993px) {
+            .product-container {
+                display: none;
+            }
+
+            .product-detail {
+                display: none;
+            }
+        }
+
+        /* Social Media Page Styles */
+        .social-media-section {
+            padding: 15rem 0 5rem;
+            min-height: 100vh;
+        }
+
+        .social-header {
+            text-align: center;
+            margin-bottom: 6rem;
+        }
+
+        .social-title {
+            font-size: 4.5rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .social-subtitle {
+            font-size: 1.8rem;
+            color: var(--light-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .social-links-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 5rem;
+        }
+
+        .social-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            backdrop-filter: var(--glass-blur);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary-color);
+        }
+
+        .platform-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+            color: var(--dark-bg);
+            transition: var(--transition);
+        }
+
+        .social-card:hover .platform-icon {
+            transform: scale(1.1);
+        }
+
+        .platform-icon {
+            background-color: var(--primary-color);
+            color: var(--dark-bg);
+        }
+
+        .social-name {
+            font-size: 2.2rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .social-desc {
+            font-size: 1.5rem;
+            color: var(--light-text);
+            margin-bottom: 2.5rem;
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.2rem 2.5rem;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border-radius: 50px;
+            font-size: 1.6rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .social-btn:hover {
+            background-color: var(--btn-hover-bg);
+            color: var(--btn-hover-text);
+            transform: translateY(-2px);
+        }
+
+        .social-btn i {
+            font-size: 1.8rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(17, 17, 17, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #eee;
+            padding: 2rem 0;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1.4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer .container p {
+            margin: 0 auto;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .social-media-section {
+                padding: 12rem 0 2.5rem;
+            }
+
+            .social-title {
+                font-size: 3.5rem;
+            }
+
+            .social-subtitle {
+                font-size: 1.6rem;
+            }
+
+            .social-links-container {
+                grid-template-columns: 1fr;
+            }
+
+            .social-card {
+                padding: 2.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .social-title {
+                font-size: 2.8rem;
+            }
+
+            .platform-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 3rem;
+            }
+
+            .social-name {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">CAD<span>Trader.</span></a>
+
+            <!-- Premium Offer Bar -->
+            <div class="offer-bar" aria-label="Special offers">
+                <div class="offer-track">
+                    <span class="offer-item">
+                        <span class="icon" aria-hidden="true">🔥</span>
+                        <span class="highlight">FLASH SALE: 50% Off First Order</span>
+                    </span>
+                    <span class="offer-item">
+                        <span class="icon" aria-hidden="true">🚚</span>
+                        <span class="highlight">Free Worldwide Shipping</span>
+                    </span>
+                    <span class="offer-item gradient-text">
+                        <span class="icon" aria-hidden="true">🎁</span>
+                        <span class="highlight">New: Buy 2 Get 1 Free</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Social Media Links Section -->
+    <section class="social-media-section">
+        <div class="container">
+            <div class="social-header">
+                <h1 class="social-title">Connect With Us</h1>
+                <p class="social-subtitle">Follow us on social media to stay updated with our latest products, offers.
+                </p>
+            </div>
+
+            <div class="social-links-container">
+                <!-- WhatsApp -->
+                <div class="social-card">
+                    <div class="platform-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3 class="social-name">WhatsApp</h3>
+                    <p class="social-desc">Chat directly with our support team for quick assistance</p>
+                    <a href="https://wa.me/919635639444" class="social-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> Message
+                    </a>
+                </div>
+
+                <!-- Instagram -->
+                <div class="social-card">
+                    <div class="platform-icon">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <h3 class="social-name">Instagram</h3>
+                    <p class="social-desc">See our latest designs and behind-the-scenes content</p>
+                    <a href="https://instagram.com/yourusername" class="social-btn" target="_blank">
+                        <i class="fab fa-instagram"></i> Follow
+                    </a>
+                </div>
+
+                <!-- Facebook -->
+                <div class="social-card">
+                    <div class="platform-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <h3 class="social-name">Facebook</h3>
+                    <p class="social-desc">Join our community for discussions and updates</p>
+                    <a href="https://facebook.com/yourpage" class="social-btn" target="_blank">
+                        <i class="fab fa-facebook-f"></i> Follow
+                    </a>
+                </div>
+
+                <!-- YouTube -->
+                <div class="social-card">
+                    <div class="platform-icon">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <h3 class="social-name">YouTube</h3>
+                    <p class="social-desc">Watch tutorials and product showcases</p>
+                    <a href="https://youtube.com/yourchannel" class="social-btn" target="_blank">
+                        <i class="fab fa-youtube"></i> Subscribe
+                    </a>
+                </div>
+
+                <!-- Telegram -->
+                <div class="social-card">
+                    <div class="platform-icon">
+                        <i class="fab fa-telegram-plane"></i>
+                    </div>
+                    <h3 class="social-name">Telegram</h3>
+                    <p class="social-desc">Get instant updates through our channel</p>
+                    <a href="https://t.me/yourchannel" class="social-btn" target="_blank">
+                        <i class="fab fa-telegram-plane"></i> Join Channel
+                    </a>
+                </div>
+
+                <!-- Email -->
+                <div class="social-card">
+                    <div class="platform-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3 class="social-name">Email</h3>
+                    <p class="social-desc">For business inquiries and support</p>
+                    <a href="mailto:your@email.com" class="social-btn" target="_blank">
+                        <i class="fas fa-envelope"></i> Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2025 xRestart911. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple animation for social cards on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            const socialCards = document.querySelectorAll('.social-card');
+
+            socialCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 150 * index);
+
+                // Initial state
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            });
+        });
+    </script>
+</body>
+
+</html>

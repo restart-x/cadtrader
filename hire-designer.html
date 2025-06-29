@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work in Progress</title>
+    <link rel="icon" href="assets/icon.svg">
+
+    <style>
+        :root {
+            --primary-color: #ffc300;
+            --text-color: #e0e0e0;
+            --dark-bg: #0a0a0a;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Verdana', sans-serif;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: block;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .message-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid var(--primary-color);
+            padding: 3rem;
+            border-radius: 8px;
+            max-width: 600px;
+            text-align: center;
+            color: var(--text-color);
+            background-color: rgba(0, 0, 0, 0.2);
+            /* lower opacity */
+            backdrop-filter: blur(5px);
+            /* ✅ Blur matrix behind */
+            -webkit-backdrop-filter: blur(5px);
+            /* Safari support */
+        }
+
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 1366px) {
+            .message-box {
+                padding: 2rem;
+                width: 70%;
+            }
+
+            h1 {
+                font-size: 2.8rem;
+            }
+
+            p {
+                font-size: 1.25rem;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .message-box {
+                padding: 2rem;
+                width: 70%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .message-box {
+                padding: 2rem;
+                width: 70%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 562px) {
+            .message-box {
+                padding: 1.5rem;
+                width: 80%;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            p {
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .message-box {
+                padding: 1.5rem;
+                width: 80%;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            p {
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="matrix"></canvas>
+
+        <div class="message-box">
+            <h1>🚧 Work in Progress</h1>
+            <p>Please come back later!</p>
+        </div>
+
+    <script>
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+        const letters = "01";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function draw() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = "#ffc300"; // 🔥 Yellow text instead of green
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33);
+        window.addEventListener('resize', () => location.reload());
+    </script>
+
+</body>
+
+</html>

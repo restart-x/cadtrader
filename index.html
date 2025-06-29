@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Royal Ring Collection | CADTrader</title>
+    <link rel="icon" href="assets/icon.svg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/STLLoader.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #ffc300;
+            --secondary-color: #1a1a1a;
+            --text-color: #e0e0e0;
+            --dark-bg: #0a0a0a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --header-blur-bg: rgba(18, 18, 18, 0.8);
+            --btn-hover-bg: #ffc300;
+            --btn-hover-text: #121212;
+            --glass-blur: blur(15px);
+            --light-text: #aaaaaa;
+            --border-color: rgba(212, 175, 55, 0.2);
+            --border-radius: 8px;            
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Verdana', Geneva, Tahoma, sans-serif;
+            outline: none !important;
+            box-shadow: none !important;
+            border: none;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+        }
+
+        html {
+            font-size: 62.5%;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header Styles */
+        header {
+            background: var(--header-blur-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary-color);
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: var(--text-color);
+        }
+
+        /* Offer Bar */
+        .offer-bar {
+            flex: 1;
+            overflow: hidden;
+            background: transparent;
+            padding: 0 20px;
+            margin-left: 20px;
+            border: none;
+            box-shadow: none;
+        }
+
+        .offer-item {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .offer-track {
+            display: inline-block;
+            white-space: nowrap;
+            animation: scroll 18s linear infinite;
+            padding-left: 100%;
+        }
+
+        .offer-item {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 30px;
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: var(--dark-bg);
+            padding: 20rem 0 8rem;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            color: var(--text-color);
+            line-height: 1.2;
+            margin-bottom: 2.5rem;
+            font-weight: 700;
+            text-align: left;
+        }
+
+        .hero h1 span {
+            color: var(--primary-color);
+            position: relative;
+        }
+
+        .hero .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 5rem;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: left;
+        }
+
+        .hero-content {
+            flex: 1 1 50%;
+            padding-right: 2rem;
+        }
+
+        .hero p {
+            font-size: 2rem;
+            color: var(--light-text);
+            margin-bottom: 4rem;
+            max-width: 600px;
+            text-align: left;
+            line-height: 1.7;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.6rem;
+            color: var(--light-text);
+        }
+
+        .hero-image {
+            position: relative;
+            flex: 1 1 45rem;
+            text-align: center;
+        }
+
+        .hero-image-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            z-index: 2;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.6));
+        }
+
+        .hero-image-container {
+            width: 100%;
+            height: 400px;
+            max-width: 500px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease;
+        }
+
+        .hero-image-container:hover {
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.2);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        /* Canvas styling for Three.js renderer */
+        .hero-image-container canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+            cursor: grab;
+        }
+
+        .hero-image-container canvas:active {
+            cursor: grabbing;
+        }
+
+        /* Model Viewer Styles */
+        .model-viewer-container {
+            width: 100%;
+            height: 600px;
+            max-width: 1000px;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+            padding: 0 0 0 5%;
+        }
+
+        .model-viewer-container canvas {
+            display: block;
+            width: 105% !important;
+            height: 105% !important;
+            object-fit: contain;
+            cursor: grab;
+            margin: -2.5% 0 -2.5% -5%;
+            background: transparent !important;
+        }
+
+        .model-viewer-container canvas:active {
+            cursor: grabbing;
+        }
+
+        .model-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            z-index: 10;
+            gap: 2rem;
+        }
+
+        /* Product Detail Section */
+        .product-detail {
+            padding: 13.5rem 0;
+        }
+
+        .product-container {
+            display: flex;
+            gap: 5rem;
+            align-items: flex-start;
+            margin-top: 10rem;
+        }
+
+        .main-image {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            margin-top: 3rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .main-image img {
+            width: 100%;
+            display: block;
+            object-fit: contain;
+            object-position: center;
+            transition: transform 0.3s ease;
+        }
+
+        .main-image:hover img {
+            transform: scale(1.03);
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 3.5rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .product-title span {
+            color: var(--primary-color);
+        }
+
+        .product-subtitle {
+            font-size: 1.8rem;
+            color: var(--light-text);
+            margin-bottom: 3rem;
+        }
+
+        .product-price {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            width: 100%;
+        }
+
+        .price-display {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .discounted-price {
+            font-size: 3rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .original-price {
+            font-size: 2rem;
+            color: var(--light-text);
+            text-decoration: line-through;
+        }
+
+        .price-actions {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .price-actions .btn {
+            min-width: 120px;
+            padding: 1rem 1.5rem;
+            font-size: 1.4rem;
+            white-space: nowrap;
+        }
+
+        .price-actions .btn .fa-whatsapp {
+            font-size: 1.8rem;
+        }
+
+        .price-actions .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .product-meta {
+            display: flex;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.6rem;
+            color: var(--light-text);
+        }
+
+        .meta-item i {
+            color: var(--primary-color);
+        }
+
+        .product-description {
+            margin-bottom: 4rem;
+        }
+
+        .description-title {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        .description-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 5rem;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .description-content {
+            font-size: 1.6rem;
+            color: var(--light-text);
+            line-height: 1.8;
+        }
+
+        .custom-list {
+            list-style: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .custom-list li {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 5px;
+            font-size: 1.6rem;
+            color: var(--text-color);
+        }
+
+        .custom-list li::before {
+            content: "●";
+            position: absolute;
+            left: 0;
+            top: 2px;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+
+        .btn {
+            display: inline-block;
+            padding: 1.5rem 3rem;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            font-size: 1.6rem;
+            font-weight: 600;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            color: var(--btn-hover-text);
+            transform: translateY(-3px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+        }
+
+        /* Products Section */
+        .products-section {
+            padding: 8rem 0;
+            background-color: var(--dark-bg);
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+            gap: 3rem;
+            padding: 0;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            position: relative;
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-color);
+        }
+
+        .product-card:hover {
+            box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.3);
+        }
+
+        .wishlist-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 4rem;
+            height: 4rem;
+            background-color: var(--card-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: var(--light-text);
+            cursor: pointer;
+            z-index: 10;
+            border: none;
+            transition: var(--transition);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-color);
+        }
+
+        .wishlist-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .wishlist-btn.active {
+            color: #ff4757;
+        }
+
+        .badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-size: 1.2rem;
+            font-weight: 600;
+            z-index: 10;
+        }
+
+        .product-img {
+            height: auto;
+            overflow: hidden;
+        }
+
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 2rem;
+        }
+
+        .product-info h3 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+
+        .product-info p {
+            font-size: 1.4rem;
+            color: var(--light-text);
+            margin-bottom: 1.5rem;
+        }
+
+        .file-info {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .file-info span {
+            font-size: 1.4rem;
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .file-info i {
+            color: var(--primary-color);
+        }
+
+        .price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price span {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .view-btn {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-size: 1.5rem;
+        }
+
+        .view-btn:hover {
+            background: var(--primary-color);
+            color: #121212;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 8rem 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.9)), url('assets/cta.png') no-repeat center center/cover;
+            color: var(--text-color);
+            text-align: center;
+            padding-bottom: 8rem;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cta-content h2 {
+            font-size: 3.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .cta-content p {
+            font-size: 1.8rem;
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            color: var(--light-text);
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 4rem 0;
+            background-color: var(--dark-bg);
+            border-top: 1px solid var(--border-color);
+
+        }
+
+        .faq-accordion {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border: none;
+            text-align: left;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--text-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: var(--glass-blur);
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+            color: var(--primary-color);
+        }
+
+        .faq-question:hover i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: rgba(10, 10, 10, 0.7);
+        }
+
+        .faq-answer p {
+            padding: 2rem 2rem 2rem;
+            font-size: 1.6rem;
+            color: var(--light-text);
+            line-height: 1.8;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+        }
+
+        /* CTA Proof Section */
+        .proof-cta-container {
+            margin: auto;
+            max-width: 800px;
+            text-align: center;
+            padding-bottom: 5rem;
+        }
+
+        .cta-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .divider-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+            flex-grow: 1;
+        }
+
+        .cta-divider:first-child .divider-line {
+            max-width: 500px;
+        }
+
+        .cta-divider:last-child .divider-line {
+            max-width: 200px;
+        }
+
+        .divider-icon {
+            color: var(--primary-color);
+            margin: 0 2rem;
+            font-size: 1.8rem;
+        }
+
+        .proof-cta-content h3 {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 5px rgba(212, 175, 55, 0.3);
+        }
+
+        .proof-cta-content p {
+            font-size: 1.6rem;
+            color: #ccc;
+            margin-bottom: 2.5rem;
+        }
+
+        .proof-cta .cta-button {
+            padding: 1.5rem 4rem;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #ffc300, #B8860B);
+            color: #121212;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .proof-cta .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.6);
+        }
+
+        .proof-cta .cta-button i {
+            margin-right: 10px;
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(212, 175, 55, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+            }
+        }
+
+        .payment-methods {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 2rem auto;
+            flex-wrap: wrap;
+        }
+
+        .payment-methods img {
+            width: 45px;
+            height: auto;
+        }
+
+        /* Sections Common Styles */
+        .section-title {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-color);
+        }
+
+        .section-title span {
+            color: var(--primary-color);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(17, 17, 17, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            color: #eee;
+            padding: 2rem 0;
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 1.4rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer .container p {
+            margin: 0 auto;
+            text-align: center;
+            width: 100%;
+        }
+
+        /* Animation for offer bar */
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .product-container {
+                flex-direction: column;
+                gap: 3rem;
+                margin: 0;
+            }
+
+            .product-info {
+                padding-top: 0;
+                width: 100%;
+            }
+
+            .product-detail {
+                padding: 7rem 0 0;
+            }
+
+            .products-section {
+                padding: 0 0 4rem;
+            }
+
+            .hero {
+                display: none;
+            }
+
+            .section-title {
+                font-size: 3rem;
+            }
+
+
+        }
+
+        @media (max-width: 768px) {
+            html {
+                font-size: 55%;
+            }
+
+            .product-title {
+                font-size: 2.8rem;
+            }
+
+            .product-subtitle {
+                font-size: 1.6rem;
+            }
+
+            .product-price {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 1.5rem;
+            }
+
+            .price-display {
+                flex-direction: row;
+                align-items: center;
+                gap: 1rem;
+                order: 1;
+            }
+
+            .price-actions {
+                flex-direction: row;
+                order: 2;
+                width: auto;
+                gap: 1rem;
+            }
+
+
+            .product-container .btn {
+                width: auto;
+                padding: 1.2rem 2rem;
+                font-size: 1.4rem;
+            }
+
+            .offer-bar {
+                margin-left: 10px;
+                padding: 6px 10px;
+                border-radius: 30px;
+                min-width: 150px;
+                overflow: hidden;
+            }
+
+            .offer-item {
+                font-size: 18px;
+                margin-right: 20px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .cta-section {
+                padding: 5rem 1rem;
+            }
+
+            .cta-content h2 {
+                font-size: 2.5rem;
+                margin-bottom: 1.5rem;
+            }
+
+            .cta-content p {
+                font-size: 1.6rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .cta-buttons {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 1rem;
+                width: 100%;
+            }
+
+            .cta-buttons .btn {
+                width: 100%;
+                min-width: 0;
+                padding: 1.2rem 0.5rem;
+                font-size: 1.4rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .discounted-price {
+                font-size: 2.5rem;
+            }
+
+            .original-price {
+                font-size: 1.8rem;
+            }
+
+            .cta-divider:first-child .divider-line {
+                max-width: 200px;
+            }
+
+            .cta-divider:last-child .divider-line {
+                max-width: 125px;
+            }
+
+            .divider-icon {
+                margin: 0 1rem;
+                font-size: 1.5rem;
+            }
+
+            .proof-cta-content h3 {
+                font-size: 2rem;
+            }
+
+            .proof-cta-content p {
+                font-size: 1.4rem;
+            }
+
+            .proof-cta .cta-button {
+                padding: 1.5rem;
+                font-size: 1.6rem;
+                width: 60%;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .product-title {
+                font-size: 2.4rem;
+            }
+
+            .product-price {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+
+            .price-display {
+                width: 100%;
+                justify-content: flex-start;
+            }
+
+            .offer-bar {
+                min-width: 120px;
+                padding: 5px 8px;
+            }
+
+            .offer-item {
+                font-size: 16px;
+                margin-right: 15px;
+            }
+
+            .logo {
+                font-size: 20px;
+            }
+
+            .button-container {
+                flex-direction: column;
+                gap: 1.5rem;
+                justify-content: center;
+                flex-wrap: nowrap;
+            }
+
+            .cta-button {
+                width: 50%;
+                font-size: 1.6rem;
+                padding: 1.4rem 2rem;
+                max-width: none;
+            }
+
+            .proof-cta-content h3 {
+                font-size: 1.8rem;
+            }
+
+            .section-title {
+                font-size: 2.6rem;
+            }
+
+        }
+
+        @media (min-width: 993px) {
+            .product-container {
+                display: none;
+            }
+
+            .product-detail {
+                display: none;
+            }
+        }
+
+
+        /* Tools Section */
+        .dual-tools-section {
+            padding: 6rem 0;
+        }
+
+        .dual-tools-card {
+            background-color: var(--dark-bg);
+            border-radius: var(--border-radius);
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            box-shadow: var(--box-shadow);
+
+        }
+
+        .dual-tools-card h3 {
+            font-size: 2.4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .tools-subtitle {
+            font-size: 1.6rem;
+            color: var(--light-text);
+            margin-bottom: 4rem;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+        }
+
+        .tool-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 3rem 2.5rem;
+            border: 1px solid var(--border-color);
+
+            transition: transform 0.3s ease;
+        }
+
+
+
+        .tool-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            color: var(--dark-bg);
+            /* Icon color */
+            font-size: 2.5rem;
+        }
+
+        .tool-card h4 {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .tool-card p {
+            font-size: 1.5rem;
+            color: var(--light-text);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .btn-tool {
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-tool:hover {
+            background-color: var(--btn-hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dual-tools-card {
+                padding: 4rem 2rem;
+            }
+
+
+            .dual-tools-section {
+                padding: 0;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tool-card {
+                padding: 2.5rem 2rem;
+            }
+        }
+
+        /* Hire Designer Section Styles */
+        .hire-designer-section {
+            padding: 6rem 0 3rem;
+            background-color: var(--dark-bg);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hire-designer-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hire-designer-title {
+            font-size: 3.5rem;
+            color: var(--text-color);
+            margin-bottom: 2rem;
+        }
+
+        .hire-designer-title span {
+            color: var(--primary-color);
+        }
+
+        .hire-designer-description {
+            font-size: 1.8rem;
+            color: var(--light-text);
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        .hire-designer-button-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 4rem;
+        }
+
+        .hire-designer-button {
+            padding: 1.5rem 4rem;
+            font-size: 1.8rem;
+            position: relative;
+            z-index: 2;
+            background-color: var(--primary-color);
+            color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            display: inline-flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hire-designer-button-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(212, 175, 55, 0.3);
+            border-radius: var(--border-radius);
+            filter: blur(10px);
+            z-index: 1;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+
+            .hire-designer-section {
+                padding: 4rem 0;
+                padding-bottom: 0;
+            }
+
+            .hire-designer-title {
+                font-size: 2.4rem;
+            }
+
+
+            .hire-designer-title {
+                font-size: 2.8rem;
+            }
+
+            .hire-designer-description {
+                font-size: 1.6rem;
+            }
+
+            .hire-designer-button {
+                padding: 1.2rem 3rem;
+                font-size: 1.6rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hire-designer-section {
+                padding: 4rem 0;
+                padding-bottom: 0;
+            }
+
+            .hire-designer-title {
+                font-size: 2.4rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="index.html" class="logo">CAD<span>Trader.</span></a>
+
+            <!-- Premium Offer Bar -->
+            <div class="offer-bar" aria-label="Special offers">
+                <div class="offer-track">
+                    <span class="offer-item">
+                        <span class="icon" aria-hidden="true">🔥</span>
+                        <span class="highlight">FLASH SALE: 50% Off First Order</span>
+                    </span>
+                    <span class="offer-item">
+                        <span class="icon" aria-hidden="true">🚚</span>
+                        <span class="highlight">Free Worldwide Shipping</span>
+                    </span>
+                    <span class="offer-item gradient-text">
+                        <span class="icon" aria-hidden="true">🎁</span>
+                        <span class="highlight">New: Buy 2 Get 1 Free</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1><span>Premium CAD </span>Products</h1>
+                <p>Download high-quality, ready-to-use CAD designs to elevate your jewelry business. Our collection
+                    saves you hours of design work with professionally crafted files.</p>
+                <div class="hero-buttons">
+                    <a href="#categories" class="btn">Explore Products</a>
+                    <a href="#features" class="btn btn-outline">Contact Us</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">Premium Designs</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">2,000+</span>
+                        <span class="stat-label">Happy Customers</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-image">
+                <div class="model-viewer-container" id="stl-container">
+                    <div class="model-loading">
+                        <div class="loading-bar-container">
+                            <div class="loading-bar-label">Loading 3D Model</div>
+                            <div class="loading-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Detail Section -->
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-container">
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img src="assets/product-box-psd.jpg" alt="Royal Ring Collection" id="mainImage">
+                    </div>
+                </div>
+
+                <div class="product-info">
+                    <h1 class="product-title">Royal Ring <span>Collection</span></h1>
+                    <p class="product-subtitle">Complete set of 12 premium ring designs for jewelry makers</p>
+
+                    <div class="product-price">
+                        <div class="price-display">
+                            <span class="discounted-price">₹1,200</span>
+                            <span class="original-price">₹1,299</span>
+                        </div>
+                        <div class="price-actions">
+                            <a href="https://wa.me/919635639444?text=I%20want%20to%20buy%20Royal%20Ring%20Collection%20for%20₹1299"
+                                class="btn" target="_blank">
+                                <i class="fab fa-whatsapp"></i> Buy Now
+                            </a>
+                            <a href="assets/product.pdf" class="btn btn-outline" target="_blank">
+                                <i class="fas fa-file-pdf"></i> View PDF
+                            </a>
+                        </div>
+                    </div>
+                    <div class="product-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-file"></i>
+                            <span>12 CAD Files</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-download"></i>
+                            <span>Instant Download</span>
+                        </div>
+                    </div>
+
+                    <div class="product-description">
+                        <h3 class="description-title"><span>Product </span> Description</h3>
+                        <div class="description-content">
+                            <ul class="custom-list">
+                                <li>High-quality CAD file</li>
+                                <li>Ready for 3D printing & manufacturing</li>
+                                <li>Fully editable layers (Rhino & Matrix compatible)</li>
+                                <li>Clean topology and error-free mesh</li>
+                                <li>Instant digital download after purchase</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section" id="products">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">You May Also <span>Like</span></h2>
+            </div>
+            <div class="products">
+                <!-- Product 1 -->
+                <div class="product-card">
+                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+                    <span class="badge">Bestseller</span>
+                    <a href="product.html" class="clickable-image" target="_blank">
+                        <div class="product-img">
+                            <img src="assets/product.png" alt="Royal Ring CAD Design">
+                        </div>
+                    </a>
+                    <div class="product-info">
+                        <h3>Royal Ring Collection</h3>
+                        <p>Complete set of 12 premium ring designs</p>
+                        <div class="file-info">
+                            <span><i class="fas fa-file"></i> 12 files</span>
+                            <span><i class="fas fa-ruler-combined"></i> Editable</span>
+                        </div>
+                        <div class="price">
+                            <span>₹1,299</span>
+                            <a href="product.html" class="view-btn" target="_blank">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card">
+                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+                    <span class="badge">New</span>
+                    <a href="product.html" class="clickable-image" target="_blank">
+                        <div class="product-img">
+                            <img src="assets/product.png" alt="Modern Necklace CAD Design">
+                        </div>
+                    </a>
+                    <div class="product-info">
+                        <h3>Modern Necklace Set</h3>
+                        <p>5 contemporary necklace designs</p>
+                        <div class="file-info">
+                            <span><i class="fas fa-file"></i> 5 files</span>
+                            <span><i class="fas fa-ruler-combined"></i> Editable</span>
+                        </div>
+                        <div class="price">
+                            <span>₹999</span>
+                            <a href="product.html" class="view-btn" target="_blank">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card">
+                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+                    <a href="product.html" class="clickable-image" target="_blank">
+                        <div class="product-img">
+                            <img src="assets/product.png" alt="Elegant Earrings CAD Design">
+                        </div>
+                    </a>
+                    <div class="product-info">
+                        <h3>Elegant Earrings Pack</h3>
+                        <p>8 stylish earring designs for all occasions</p>
+                        <div class="file-info">
+                            <span><i class="fas fa-file"></i> 8 files</span>
+                            <span><i class="fas fa-ruler-combined"></i> Editable</span>
+                        </div>
+                        <div class="price">
+                            <span>₹899</span>
+                            <a href="product.html" class="view-btn" target="_blank">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+                    <a href="product.html" class="clickable-image" target="_blank">
+                        <div class="product-img">
+                            <img src="assets/product.png" alt="Elegant Earrings CAD Design">
+                        </div>
+                    </a>
+                    <div class="product-info">
+                        <h3>Elegant Earrings Pack</h3>
+                        <p>8 stylish earring designs for all occasions</p>
+                        <div class="file-info">
+                            <span><i class="fas fa-file"></i> 8 files</span>
+                            <span><i class="fas fa-ruler-combined"></i> Editable</span>
+                        </div>
+                        <div class="price">
+                            <span>₹899</span>
+                            <a href="product.html" class="view-btn" target="_blank">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+                    <a href="product.html" class="clickable-image" target="_blank">
+                        <div class="product-img">
+                            <img src="assets/product.png" alt="Elegant Earrings CAD Design">
+                        </div>
+                    </a>
+                    <div class="product-info">
+                        <h3>Elegant Earrings Pack</h3>
+                        <p>8 stylish earring designs for all occasions</p>
+                        <div class="file-info">
+                            <span><i class="fas fa-file"></i> 8 files</span>
+                            <span><i class="fas fa-ruler-combined"></i> Editable</span>
+                        </div>
+                        <div class="price">
+                            <span>₹899</span>
+                            <a href="product.html" class="view-btn" target="_blank">View Details</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card">
+                    <button class="wishlist-btn"><i class="far fa-heart"></i></button>
+                    <span class="badge">Popular</span>
+                    <a href="product.html" class="clickable-image" target="_blank">
+                        <div class="product-img">
+                            <img src="assets/product.png" alt="Luxury Bracelet CAD Design">
+                        </div>
+                    </a>
+                    <div class="product-info">
+                        <h3>Luxury Bracelet Series</h3>
+                        <p>6 high-end bracelet designs with variations</p>
+                        <div class="file-info">
+                            <span><i class="fas fa-file"></i> 6 files</span>
+                            <span><i class="fas fa-ruler-combined"></i> Editable</span>
+                        </div>
+                        <div class="price">
+                            <span>₹1,199</span>
+                            <a href="product.html" class="view-btn" target="_blank">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="section-title">Join Our Jewellery <span>Community!</span></h2>
+                <p>Get latest updates, offers & connect with others.</p>
+                <div class="cta-buttons">
+                    <a href="connect-with-us.html" class="btn" target="_blank">Connect With Us</a>
+                    <a href="https://chat.whatsapp.com/J1PSJ21vDKd5Iwx369yvb6" class="btn btn-outline" target="_blank">WhatsApp Group</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+
+
+
+    <!-- Tools Section -->
+    <section class="dual-tools-section">
+        <div class="container">
+            <div class="dual-tools-card">
+                <div class="tools-grid">
+                    <!-- Grid Image Generator Tool -->
+                    <div class="tool-card">
+                        <div class="tool-icon" style="background-color: var(--primary-color);">
+                            <i class="fas fa-th"></i>
+                        </div>
+                        <h4 class="section-title">Grid Image <span>Generator</span></h4>
+                        <p>Create perfect social media grids, gallery layouts, and image collages</p>
+                        <a href="Gridify.html" class="btn-tool">
+                            <i class="fas fa-rocket"></i> Generate Now
+                        </a>
+                    </div>
+
+                    <!-- PDF Generator Tool -->
+                    <div class="tool-card">
+                        <div class="tool-icon" style="background-color: var(--primary-color);">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <h4 class="section-title">PDF <span>Generator</span></h4>
+                        <p>Convert documents to professional PDFs with custom settings</p>
+                        <a href="pdf-generator.html" class="btn-tool">
+                            <i class="fas fa-file-export"></i> Create PDF
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+    <!-- Hire Designer Section -->
+    <section class="hire-designer-section">
+        <div class="container">
+            <div class="hire-designer-content">
+                <h2 class="hire-designer-title">Need Custom <span>Designs?</span></h2>
+                <p class="hire-designer-description">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit repellendus maxime eligendi? Saepe qui
+                    aut vero dicta, nobis quibusdam, repudiandae obcaecati eligendi pariatur quis, reiciendis harum
+                    magni. Delectus.
+                </p>
+                <div class="hire-designer-button-wrapper">
+                    <a href="hire-designer.html" class="hire-designer-button">
+                        <i class="fas fa-user-tie"></i> Hire Designers
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="container">
+            <h2 class="section-title">Frequently Asked <span>Questions</span></h2>
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <button class="faq-question">What file formats do you provide? <i
+                            class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer">
+                        <p>We provide CAD files in multiple formats including STL, OBJ, 3DM, and more. Each product
+                            listing specifies the available formats.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Can I modify the designs after purchase? <i
+                            class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer">
+                        <p>Yes, all our CAD files are fully editable. You can modify them to suit your specific
+                            requirements.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">What is your refund policy? <i
+                            class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer">
+                        <p>Due to the digital nature of our products, we don't offer refunds once files are downloaded.
+                            However, we guarantee the quality of our files and will assist with any technical issues.
+                        </p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Do you offer custom CAD design services? <i
+                            class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer">
+                        <p>Yes, we provide custom design services. Please contact us via WhatsApp to discuss your
+                            requirements.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add this right before the closing </section> tag of the proof-section -->
+    <div class="proof-cta-container">
+        <div class="cta-divider">
+            <span class="divider-line"></span>
+            <i class="fas fa-gem divider-icon"></i>
+            <span class="divider-line"></span>
+        </div>
+
+        <div class="proof-cta-content">
+            <h3>Ready to Start Your File Selling Business?</h3>
+            <p>Start Your File Selling Business in Just ₹4,999!</p>
+
+            <div class="proof-cta">
+                <a href="https://wa.me/919635639444?text=Hello,%20I'm%20interested%20in%20the%20Premium%20CAD%20Files%20Bundle"
+                    class="cta-button pulse" target="_blank">
+                    <i class="fas fa-download"></i> Buy Now - Only ₹4,999!
+                </a>
+            </div>
+
+            <div class="payment-methods" style="display: flex; align-items: center; gap: 10px;">
+                <img src="assets/upi.svg" alt="Visa" style="width: 40px; height: 25px; object-fit: contain;">
+                <img src="assets/gpay.svg" alt="Google Pay" style="width: 40px; height: 25px; object-fit: contain;">
+                <img src="assets/phonepe.svg" alt="PhonePe" style="width: 40px; height: 25px; object-fit: contain;">
+                <img src="assets/paytm.svg" alt="Paytm" style="width: 50px; height: 30px; object-fit: contain;">
+            </div>
+        </div>
+
+        <div class="cta-divider">
+            <span class="divider-line"></span>
+            <i class="fas fa-gem divider-icon"></i>
+            <span class="divider-line"></span>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="copyright">
+                <p>&copy; 2025 xRestart911. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('stl-container');
+            if (!container) return;
+
+            // Check if mobile device
+            const isMobile = window.matchMedia("(max-width: 576px)").matches;
+
+            if (isMobile) {
+                container.style.display = 'none';
+                return;
+            }
+
+            // Initialize Three.js
+            const scene = new THREE.Scene();
+            scene.background = null;
+
+            // Camera setup
+            const camera = new THREE.PerspectiveCamera(
+                45,
+                container.clientWidth / container.clientHeight,
+                0.1,
+                1000
+            );
+
+            // Renderer with alpha channel
+            const renderer = new THREE.WebGLRenderer({
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // Enhanced lighting setup for golden look
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            // Directional light for highlights
+            const directionalLight = new THREE.DirectionalLight(0xfff1b0, 1);
+            directionalLight.position.set(5, 10, 7.5);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+
+            // Back light to create depth
+            const backLight = new THREE.PointLight(0xffffff, 0.4);
+            backLight.position.set(-5, -5, -5);
+            scene.add(backLight);
+
+            // Controls configuration
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.25;
+            controls.enablePan = false;
+            controls.enableZoom = false;
+
+            // Load STL model
+            const loader = new THREE.STLLoader();
+            loader.load(
+                'assets/model.stl',
+                function (geometry) {
+                    container.querySelector('.model-loading').style.display = 'none';
+
+                    // Create mesh with gold material
+                    const material = new THREE.MeshPhongMaterial({
+                        color: 0xffc300,
+                        specular: 0xFFFFFF,
+                        shininess: 100,
+                        wireframe: false,
+                        emissive: 0x000000,
+                        emissiveIntensity: 0,
+                        side: THREE.DoubleSide
+                    });
+
+                    const mesh = new THREE.Mesh(geometry, material);
+                    scene.add(mesh);
+
+                    // Calculate model bounding box
+                    const box = new THREE.Box3().setFromObject(mesh);
+                    const size = box.getSize(new THREE.Vector3());
+
+                    // PERFECT SIZE SETTINGS (MODIFY THESE VALUES)
+                    const targetSize = 2.5; // Ideal base size (1.5-2.5 works well for most models)
+                    const maxDimension = Math.max(size.x, size.y, size.z);
+                    const scale = targetSize / maxDimension;
+                    mesh.scale.set(scale, scale, scale);
+
+                    // Center the model
+                    const center = box.getCenter(new THREE.Vector3());
+                    mesh.position.x -= center.x * scale;
+                    mesh.position.y -= center.y * scale;
+                    mesh.position.z -= center.z * scale;
+
+                    // Set camera position (perfect viewing distance)
+                    camera.position.z = targetSize * 1; // Optimal viewing distance
+                    camera.lookAt(0, 0, 0);
+
+                    // Set control limits
+                    controls.minDistance = targetSize * 1.6; // Minimum zoom
+                    controls.maxDistance = targetSize * 1.6; // Maximum zoom
+                    controls.update();
+
+                    // Animation loop
+                    function animate() {
+                        requestAnimationFrame(animate);
+                        controls.update();
+                        renderer.render(scene, camera);
+                    }
+                    animate();
+                },
+                function (xhr) {
+                    const percent = (xhr.loaded / xhr.total * 100);
+                    const loadingBar = container.querySelector('.loading-bar');
+                    if (loadingBar) {
+                        loadingBar.style.width = `${percent}%`;
+                    }
+                },
+                function (error) {
+                    console.error('Error loading STL:', error);
+                    container.querySelector('.model-loading').innerHTML =
+                        '<div class="model-error">Error loading 3D model</div>';
+                }
+            );
+
+            // Handle window resize
+            window.addEventListener('resize', function () {
+                if (isMobile) return;
+
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        });
+
+        // FAQ Accordion Functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+
+                question.addEventListener('click', () => {
+                    // Close all other items
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+
+                    // Toggle current item
+                    item.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
